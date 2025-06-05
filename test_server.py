@@ -40,7 +40,7 @@ class TestDeployedModel(unittest.TestCase):
 
     def test_invalid_image(self):
         """Test the deployed model with an invalid image."""
-        image_path = "invalid_image.txt"  # Replace with an invalid test file path
+        image_path = "model.py"  # Replace with an invalid test file path
         with self.assertRaises(requests.exceptions.RequestException):
             call_deployed_model(image_path)
 
