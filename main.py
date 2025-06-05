@@ -1,5 +1,4 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Request
 from model import OnnxModel, ImagePreprocessor
 from PIL import Image
 import numpy as np
@@ -14,14 +13,12 @@ image_size = (224, 224)
 onnx_model = OnnxModel(model_path)
 preprocessor = ImagePreprocessor(image_size)
 
-class ImagePayload(BaseModel):
-    payload: str  # Base64-encoded image string
-
 @app.post("/predict")
-async def predict(payload: ImagePayload):
+async def predict(request: Request):
     try:
-        # Decode the base64-encoded image
-        image_bytes = base64.b64decode(payload.payload)
+        # Read the base64-encoded image string directly from the request body
+        image_base64 = await request.body()
+        image_bytes = base64.b64decode(image_base64)
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         input_tensor = preprocessor.preprocess(image)
         input_data = np.expand_dims(input_tensor.numpy(), axis=0)  # Add batch dimension
@@ -32,4 +29,4 @@ async def predict(payload: ImagePayload):
 
         return {"prediction": predicted_class}
     except Exception as e:
-        return {"error": str(e)}, 400
+        raise HTTPException(status_code=400, detail=str(e))

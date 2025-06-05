@@ -24,13 +24,12 @@ def call_deployed_model(image_path):
         with open(image_path, 'rb') as image_file:
             # Encode the image as a base64 string
             image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
-            payload = {"payload": image_base64}  # Directly assign the base64-encoded image to 'payload'
             headers = {
                 'Authorization': f'Bearer {AUTH_TOKEN}',
-                'Content-Type': 'application/json'
+                'Content-Type': 'text/plain'  # Set content type to plain text for raw base64 string
             }
-            logging.debug(f"Sending request to {CEREBRIUM_MODEL_ENDPOINT} with headers: {headers} and payload: {payload}")
-            response = requests.post(CEREBRIUM_MODEL_ENDPOINT, json=payload, headers=headers)
+            logging.debug(f"Sending request to {CEREBRIUM_MODEL_ENDPOINT} with headers: {headers} and base64 image data")
+            response = requests.post(CEREBRIUM_MODEL_ENDPOINT, data=image_base64, headers=headers)
             logging.debug(f"Response status code: {response.status_code}")
             logging.debug(f"Response content: {response.text}")
             response.raise_for_status()
