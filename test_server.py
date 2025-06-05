@@ -9,7 +9,7 @@ import base64
 CEREBRIUM_MODEL_ENDPOINT = "https://api.cortex.cerebrium.ai/v4/p-68e74239/my-first-project/predict"
 
 # Add an authentication token for the external endpoint
-AUTH_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9qZWN0SWQiOiJwLTY4ZTc0MjM5IiwiaWF0IjoxNzQ5MTIzMTAxLCJleHAiOjIwNjQ2OTkxMDF9.B1rr50ABFF4QsBqgDYLvikTtFsf_J-iwv5LunFN7kvba7t2CruYcBMYbvO5-rvQm7QFar1VSgEqIICFlmITE_sEomGXoMbJRbcKsBhllcaXI4GxukCfv1hswTs_54XOQj4Rrhpd7O0IYX7X6t9hgcgCPYaAGX1AXnl4zHJzFnxCox8XklUDla7HpigihvDqCr2yIA5cIjwy3fm_AkD4o64TO9lBmxg-IuQtdhVW9Vr3vJj3urX4zRZxlp2Dqx1SMIPiNbZ3b5SHv92DpcJpcCcdXLo5FbFEM0z6YxPnfW2OdTd8PjUORsaCSC8N0-Cv_adLZuzKpxxxb3D1V6zoZ5g"  # Replace with the actual token
+AUTH_TOKEN = "..."  # Replace with the actual token
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
