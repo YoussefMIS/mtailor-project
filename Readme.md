@@ -58,7 +58,7 @@ Run the unit tests to verify the application:
 python -m unittest test.py
 ```
 
-To test the application manually, use the `test_server.py` script with an image file. The script will automatically encode the image as a base64 string and send it to the `/predict` endpoint:
+To test the application manually, use the `test_server.py` script with an image file. The script will automatically encode the image as a base64 string and send it directly in the request body:
 
 ```bash
 python test_server.py --image <path_to_image>
@@ -77,7 +77,7 @@ cerebrium deploy
 
 ### 6. Test the Deployed Model
 
-Use the `test_server.py` script to test the deployed model on Cerebrium. The script will send a JSON payload with the base64-encoded image string:
+Use the `test_server.py` script to test the deployed model on Cerebrium. The script will send the base64-encoded image string directly in the request body:
 
 ```bash
 python test_server.py --image <path_to_image>
@@ -101,13 +101,10 @@ python test_server.py --monitor
 
 ## Updates to the `/predict` Endpoint
 
-The `/predict` endpoint in `main.py` now accepts a JSON payload containing a base64-encoded image string. The payload format is as follows:
+The `/predict` endpoint in `main.py` now accepts a base64-encoded image string directly in the request body. The request should have the following format:
 
-```json
-{
-    "image_data": "<base64_encoded_image_string>"
-}
-```
+- **Request Body**: The base64-encoded image string.
+- **Content-Type**: `text/plain`
 
 ## Notes
 
