@@ -1,5 +1,5 @@
-torch==2.7.1+cu126
-torchvision==0.22.1+cu126
+torch==2.7.1
+torchvision==0.22.1
 fastapi==0.115.12
 pydantic==2.11.5
 cerebrium==1.40.4
