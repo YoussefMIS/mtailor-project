@@ -24,7 +24,7 @@ def call_deployed_model(image_path):
         with open(image_path, 'rb') as image_file:
             # Encode the image as a base64 string
             image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
-            payload = {"image_data": image_base64}  # Use 'image_data' as the key for the base64-encoded image
+            payload = {"payload": image_base64}  # Directly assign the base64-encoded image to 'payload'
             headers = {
                 'Authorization': f'Bearer {AUTH_TOKEN}',
                 'Content-Type': 'application/json'

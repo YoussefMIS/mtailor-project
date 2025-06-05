@@ -15,18 +15,21 @@ onnx_model = OnnxModel(model_path)
 preprocessor = ImagePreprocessor(image_size)
 
 class ImagePayload(BaseModel):
-    image_data: str  # Base64-encoded image string
+    payload: str  # Base64-encoded image string
 
 @app.post("/predict")
 async def predict(payload: ImagePayload):
-    # Decode the base64-encoded image
-    image_bytes = base64.b64decode(payload.image_data)
-    image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    input_tensor = preprocessor.preprocess(image)
-    input_data = np.expand_dims(input_tensor.numpy(), axis=0)  # Add batch dimension
+    try:
+        # Decode the base64-encoded image
+        image_bytes = base64.b64decode(payload.payload)
+        image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        input_tensor = preprocessor.preprocess(image)
+        input_data = np.expand_dims(input_tensor.numpy(), axis=0)  # Add batch dimension
 
-    # Perform inference using the ONNX model
-    prediction = onnx_model.predict(input_data)
-    predicted_class = int(np.argmax(prediction, axis=1)[0])
+        # Perform inference using the ONNX model
+        prediction = onnx_model.predict(input_data)
+        predicted_class = int(np.argmax(prediction, axis=1)[0])
 
-    return {"prediction": predicted_class}
+        return {"prediction": predicted_class}
+    except Exception as e:
+        return {"error": str(e)}, 400
