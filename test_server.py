@@ -26,7 +26,7 @@ def call_deployed_model(image_path):
             image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
             headers = {
                 'Authorization': f'Bearer {AUTH_TOKEN}',
-                'Content-Type': 'text/plain'  # Set content type to plain text for raw base64 string
+                'Content-Type': 'text/plain'  # Set content type to plain text
             }
             logging.debug(f"Sending request to {CEREBRIUM_MODEL_ENDPOINT} with headers: {headers} and base64 image data")
             response = requests.post(CEREBRIUM_MODEL_ENDPOINT, data=image_base64, headers=headers)

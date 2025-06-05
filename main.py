@@ -16,8 +16,8 @@ preprocessor = ImagePreprocessor(image_size)
 @app.post("/predict")
 async def predict(request: Request):
     try:
-        # Read the base64-encoded image string directly from the request body
-        image_base64 = await request.body()
+        # Read the raw base64-encoded image string directly from the request body
+        image_base64 = (await request.body()).decode("utf-8")
         image_bytes = base64.b64decode(image_base64)
         image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
         input_tensor = preprocessor.preprocess(image)
