@@ -4,7 +4,7 @@ import argparse
 import time
 
 # Replace with your deployed model's endpoint
-CEREBRIUM_MODEL_ENDPOINT = "https://your-cerebrium-model-endpoint.com/predict"
+CEREBRIUM_MODEL_ENDPOINT = "https://api.cortex.cerebrium.ai/v4/p-68e74239/my-first-project/predict"
 
 
 def call_deployed_model(image_path):
