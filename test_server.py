@@ -2,21 +2,42 @@ import requests
 import unittest
 import argparse
 import time
+import logging
+import base64
 
-# Replace with your deployed model's endpoint
+# Update the endpoint to match the FastAPI application in main.py
 CEREBRIUM_MODEL_ENDPOINT = "https://api.cortex.cerebrium.ai/v4/p-68e74239/my-first-project/predict"
+
+# Add an authentication token for the external endpoint
+AUTH_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9qZWN0SWQiOiJwLTY4ZTc0MjM5IiwiaWF0IjoxNzQ5MTIzMTAxLCJleHAiOjIwNjQ2OTkxMDF9.B1rr50ABFF4QsBqgDYLvikTtFsf_J-iwv5LunFN7kvba7t2CruYcBMYbvO5-rvQm7QFar1VSgEqIICFlmITE_sEomGXoMbJRbcKsBhllcaXI4GxukCfv1hswTs_54XOQj4Rrhpd7O0IYX7X6t9hgcgCPYaAGX1AXnl4zHJzFnxCox8XklUDla7HpigihvDqCr2yIA5cIjwy3fm_AkD4o64TO9lBmxg-IuQtdhVW9Vr3vJj3urX4zRZxlp2Dqx1SMIPiNbZ3b5SHv92DpcJpcCcdXLo5FbFEM0z6YxPnfW2OdTd8PjUORsaCSC8N0-Cv_adLZuzKpxxxb3D1V6zoZ5g"  # Replace with the actual token
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def call_deployed_model(image_path):
     """
-    Calls the deployed model on Cerebrium with the given image path.
+    Calls the deployed model on the local FastAPI server with the given image path.
     Returns the class ID predicted by the model.
     """
-    with open(image_path, 'rb') as image_file:
-        files = {'file': image_file}
-        response = requests.post(CEREBRIUM_MODEL_ENDPOINT, files=files)
-        response.raise_for_status()
-        return response.json().get('prediction')
+    try:
+        with open(image_path, 'rb') as image_file:
+            # Encode the image as a base64 string
+            image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
+            payload = {"image_data": image_base64}  # Use 'image_data' as the key for the base64-encoded image
+            headers = {
+                'Authorization': f'Bearer {AUTH_TOKEN}',
+                'Content-Type': 'application/json'
+            }
+            logging.debug(f"Sending request to {CEREBRIUM_MODEL_ENDPOINT} with headers: {headers} and payload: {payload}")
+            response = requests.post(CEREBRIUM_MODEL_ENDPOINT, json=payload, headers=headers)
+            logging.debug(f"Response status code: {response.status_code}")
+            logging.debug(f"Response content: {response.text}")
+            response.raise_for_status()
+            return response.json().get('prediction')
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Request failed: {e}")
+        raise
 
 
 def monitor_deployed_model():

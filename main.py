@@ -1,8 +1,10 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI
+from pydantic import BaseModel
 from model import OnnxModel, ImagePreprocessor
 from PIL import Image
 import numpy as np
 import io
+import base64
 
 app = FastAPI()
 
@@ -12,10 +14,13 @@ image_size = (224, 224)
 onnx_model = OnnxModel(model_path)
 preprocessor = ImagePreprocessor(image_size)
 
+class ImagePayload(BaseModel):
+    image_data: str  # Base64-encoded image string
+
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
-    # Read and preprocess the uploaded image
-    image_bytes = await file.read()
+async def predict(payload: ImagePayload):
+    # Decode the base64-encoded image
+    image_bytes = base64.b64decode(payload.image_data)
     image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     input_tensor = preprocessor.preprocess(image)
     input_data = np.expand_dims(input_tensor.numpy(), axis=0)  # Add batch dimension
