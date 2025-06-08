@@ -1,4 +1,4 @@
-# Mtailor Interview Project
+# Mtailor Project
 
 This repository contains a machine learning model deployment project. The project includes preprocessing, ONNX model conversion, deployment using FastAPI, and testing on the Cerebrium platform.
 
